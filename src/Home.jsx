@@ -7,6 +7,9 @@ const Home = ({ setToken }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    // Define the required fields to display
+    const requiredFields = ['name', 'email', 'createdAt'];
+
     const userData = async () => {
         try {
             const response = await axios.get(`${backendURL}/api/user`, {
@@ -40,11 +43,13 @@ const Home = ({ setToken }) => {
                 <p className='text-center mt-4'>You have successfully logged in.</p>
 
                 {loading && <p className='text-center mt-4'>Loading user data...</p>}
-                {error && !loading && <p className='text-center mt-4 text-red-600'>{error}</p>}
+                {/* {error && !loading && <p className='text-center mt-4 text-red-600'>{error}</p>} */}
 
                 {user && !loading && (
                     <div className='mt-6 space-y-3'>
-                        {Object.entries(user).map(([key, value]) => (
+                        {Object.entries(user)
+                            .filter(([key]) => requiredFields.includes(key))
+                            .map(([key, value]) => (
                             <div key={key} className='flex justify-between border-b pb-2'>
                                 <span className='font-semibold text-gray-700'>{key.replace(/([A-Z])/g, ' $1')}</span>
                                 <span className='text-gray-500'>{String(value)}</span>
